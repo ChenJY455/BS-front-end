@@ -84,6 +84,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import axios from "axios";
+import store from "@/store";
+import { ElMessage } from "element-plus";
 
 export default defineComponent({
   name: "RegisterView",
@@ -141,8 +143,7 @@ export default defineComponent({
         this.error_display.password_confirm = false;
       }
       if (pass) {
-        // const url = config.urlBase + "/register:" + config.port;
-        const url = "localhost:8080";
+        const url = store.state.urlBase + "/api/register";
         axios
           .post(url, {
             username: this.form.username,
@@ -150,13 +151,12 @@ export default defineComponent({
             password: this.form.password,
           })
           .then(() => {
-            this.$router.push({
-              path: "/",
-              query: { username: this.form.username },
-            });
+            store.commit("setUsername", this.form.username);
+            this.$router.push("/");
           })
           .catch((err: unknown) => {
             console.error(err);
+            ElMessage.error("注册失败");
           });
       }
     },

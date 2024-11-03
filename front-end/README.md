@@ -1,4 +1,4 @@
-# front-end
+# purweb
 
 ## Project setup
 ```

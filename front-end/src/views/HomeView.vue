@@ -34,6 +34,7 @@
 </template>
 
 <script lang="ts">
+import store from "@/store";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -45,11 +46,7 @@ export default defineComponent({
     };
   },
   mounted() {
-    const name = this.$route.query.username as string | undefined;
-    if (name) {
-      this.username = name;
-      console.log("name", name);
-    }
+    this.username = store.state.username;
   },
 });
 </script>

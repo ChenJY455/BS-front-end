@@ -29,6 +29,9 @@
             size="large"
             showpassword
           />
+          <div v-if="!loginpass" style="font-size: 12px; color: red">
+            您输入的用户名或密码有误
+          </div>
         </el-form-item>
         <div
           style="
@@ -55,15 +58,13 @@
             >免费注册</RouterLink
           >
         </div>
-        <el-form-item>
-          <el-button
-            type="primary"
-            @click="handleLogin"
-            style="width: 100%"
-            size="large"
-            >登录</el-button
-          >
-        </el-form-item>
+        <el-button
+          type="primary"
+          @click="handleLogin"
+          style="width: 100%"
+          size="large"
+          >登录</el-button
+        >
       </el-form>
     </div>
   </div>
@@ -71,7 +72,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-// import axios from "axios";
+import axios from "axios";
+import store from "@/store";
+import { ElMessage } from "element-plus";
 // import { AxiosResponse } from "axios";
 
 export default defineComponent({
@@ -83,40 +86,37 @@ export default defineComponent({
         password: localStorage.getItem("password") || "",
         rempass: localStorage.getItem("password") ? true : false,
       },
+      loginpass: true,
     };
   },
   methods: {
     handleLogin() {
       // Send request
-      // const url = config.urlBase + "/login:" + config.port;
-      // axios
-      //   .post(url, {
-      //     username: this.form.username,
-      //     password: this.form.password,
-      //   })
-      //   .then(() => {
-      //     // Remember the password
-      //     localStorage.setItem("username", this.form.username);
-      //     if (this.form.rempass) {
-      //       localStorage.setItem("password", this.form.password);
-      //     } else {
-      //       localStorage.removeItem("password");
-      //     }
+      const url = store.state.urlBase + "/api/login";
+      axios
+        .post(url, {
+          username: this.form.username,
+          password: this.form.password,
+        })
+        .then(() => {
+          // Remember the password
+          localStorage.setItem("username", this.form.username);
+          if (this.form.rempass) {
+            localStorage.setItem("password", this.form.password);
+          } else {
+            localStorage.removeItem("password");
+          }
 
-      //     // Redirect to the home page with the user's information
-      //     this.$router.push({
-      //       name: "Home",
-      //       params: { username: this.form.username },
-      //     });
-      //   })
-      //   .catch((err: unknown) => {
-      //     console.error(err);
-      //   });
-      // Redirect to the home page with the user's information
-      this.$router.push({
-        path: "/",
-        query: { username: this.form.username },
-      });
+          this.loginpass = true;
+          // Redirect to the home page with the user's information
+          store.commit("setUsername", this.form.username);
+          this.$router.push("/");
+        })
+        .catch((err: unknown) => {
+          console.error(err);
+          ElMessage.error("登录失败");
+          this.loginpass = false;
+        });
     },
   },
 });
