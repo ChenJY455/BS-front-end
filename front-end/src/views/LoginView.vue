@@ -52,7 +52,7 @@
               display: inline;
               font-size: 14px;
               color: black;
-              text-decoration: none;
+              text-decoration: underline;
               margin-right: 5px;
             "
             >免费注册</RouterLink
@@ -75,7 +75,6 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import store from "@/store";
 import { ElMessage } from "element-plus";
-// import { AxiosResponse } from "axios";
 
 export default defineComponent({
   name: "LoginView",
@@ -92,13 +91,16 @@ export default defineComponent({
   methods: {
     handleLogin() {
       // Send request
-      const url = store.state.urlBase + "/api/login";
+      const url = store.state.urlBase + "/api/user/login";
       axios
-        .post(url, {
-          username: this.form.username,
-          password: this.form.password,
+        .get(url, {
+          params: {
+            username: this.form.username,
+            password: this.form.password,
+          },
         })
-        .then(() => {
+        .then((res) => {
+          console.log(res);
           // Remember the password
           localStorage.setItem("username", this.form.username);
           if (this.form.rempass) {
@@ -109,7 +111,10 @@ export default defineComponent({
 
           this.loginpass = true;
           // Redirect to the home page with the user's information
-          store.commit("setUsername", this.form.username);
+          store.commit("setUsername", res.data.username);
+          store.commit("setUid", res.data.uid);
+          store.commit("setEmail", res.data.email);
+          store.commit("setIsLogin", true);
           this.$router.push("/");
         })
         .catch((err: unknown) => {
@@ -122,7 +127,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .container {
   height: 100%;
   width: 100%;

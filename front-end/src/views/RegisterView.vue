@@ -105,7 +105,7 @@ export default defineComponent({
       },
       error_info: {
         username: "用户名长度不能小于6个字符",
-        email: "请输入正确的邮箱格式",
+        email: "请输入正确的邮箱",
         password: "密码长度不能小于6个字符",
         password_confirm: "两次输入的密码不一致",
       },
@@ -145,12 +145,15 @@ export default defineComponent({
       if (pass) {
         const url = store.state.urlBase + "/api/register";
         axios
-          .post(url, {
-            username: this.form.username,
-            email: this.form.email,
-            password: this.form.password,
+          .get(url, {
+            params: {
+              username: this.form.username,
+              email: this.form.email,
+              password: this.form.password,
+            },
           })
-          .then(() => {
+          .then((res) => {
+            console.log(res);
             store.commit("setUsername", this.form.username);
             this.$router.push("/");
           })
@@ -164,7 +167,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .container {
   height: 100%;
   width: 100%;

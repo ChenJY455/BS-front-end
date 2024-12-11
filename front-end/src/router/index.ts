@@ -4,6 +4,7 @@ import HomeView from "@/views/HomeView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import "element-plus/theme-chalk/el-loading.css";
 import "element-plus/theme-chalk/el-message.css";
+import PersonalView from "@/views/PersonalView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -20,6 +21,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/register",
     name: "Register",
     component: RegisterView,
+  },
+  {
+    path: "/personal",
+    name: "Personal",
+    component: PersonalView,
   },
 ];
 
