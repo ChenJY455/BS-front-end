@@ -117,21 +117,49 @@
         "
       >
         <el-col
-          v-for="(product, productIndex) in row"
-          :key="productIndex"
+          v-for="product in row"
+          :key="product.gid"
           :span="4"
           class="product-block"
         >
-          <GoodsView :product="product" />
+          <GoodsView
+            :product="product"
+            :is_liked="likes.includes(product.gid)"
+            :addLikes="addLikes"
+            :removeLikes="removeLikes"
+          />
         </el-col>
       </el-row>
+    </div>
+    <div
+      style="
+        width: 100%;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      "
+    >
+      <el-button
+        v-if="page > 1"
+        @click="lastPage"
+        style="margin-right: 10px"
+        type="primary"
+        >上一页</el-button
+      >
+      <el-button v-if="productRows.length != 0" @click="nextPage" type="primary"
+        >下一页</el-button
+      >
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import store from "@/store";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import router from "@/router";
+import { ElMessage } from "element-plus";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -143,12 +171,20 @@ export default defineComponent({
       isLogin: false,
       page: 1,
       website: "TB",
-      productRows: Array<object>(),
+      productRows: Array<{ gid: string }[]>(),
+      likes: Array<string>(),
     };
   },
   mounted() {
     this.username = store.state.username;
     this.isLogin = store.state.isLogin;
+  },
+  watch: {
+    isLogin: function (v) {
+      if (v) {
+        this.getLikes();
+      }
+    },
   },
   methods: {
     LogOut() {
@@ -161,7 +197,7 @@ export default defineComponent({
       this.$router.push("/personal");
     },
     SearchProduct() {
-      const url = store.state.urlBase + "/api/goods/list";
+      const url = store.state.urlBase + "/api/goods/get-list";
       axios
         .get(url, {
           params: {
@@ -171,26 +207,141 @@ export default defineComponent({
           },
         })
         .then((res) => {
-          // Looger
+          // Loger
           console.log(res);
-          // 得到一个Object array，要五个一组加入productRows
-          this.productRows = [];
-          let row = [];
-          for (let i = 0; i < res.data.length; i++) {
-            row.push(res.data[i]);
-            if (row.length == 5) {
-              this.productRows.push(row);
-              row = [];
-            }
+          this.UpdataProduct(res);
+          window.scrollTo({ top: 0 });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    UpdataProduct(res: AxiosResponse) {
+      // 得到一个Object array，要五个一组加入productRows
+      this.productRows = [];
+      let row = [];
+      for (let i = 0; i < res.data.length; i++) {
+        row.push(res.data[i]);
+        if (row.length == 5) {
+          this.productRows.push(row);
+          row = [];
+        }
+      }
+    },
+    changeWebsite(web: string) {
+      this.website = web;
+      this.productRows = [];
+    },
+    lastPage() {
+      if (this.page > 1) {
+        const url = store.state.urlBase + "/api/goods/get-list";
+        axios
+          .get(url, {
+            params: {
+              keyword: this.search,
+              page: this.page - 1,
+              website: this.website,
+            },
+          })
+          .then((res) => {
+            this.page--;
+            this.UpdataProduct(res);
+            window.scrollTo({ top: 0 });
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        ElMessage("已经是第一页了");
+      }
+    },
+    nextPage() {
+      const url = store.state.urlBase + "/api/goods/get-list";
+      axios
+        .get(url, {
+          params: {
+            keyword: this.search,
+            page: this.page + 1,
+            website: this.website,
+          },
+        })
+        .then((res) => {
+          if (res.data.length == 0) {
+            ElMessage("已经是最后一页了");
+          } else {
+            this.page++;
+            this.UpdataProduct(res);
+            window.scrollTo({ top: 0 });
           }
         })
         .catch((err) => {
           console.error(err);
         });
     },
-    changeWebsite(web: string) {
-      this.website = web;
-      this.productRows = [];
+    getLikes() {
+      const url = store.state.urlBase + "/api/user/get-likes";
+      axios
+        .get(url, {
+          params: {
+            uid: store.state.uid,
+          },
+        })
+        .then((res) => {
+          this.likes = [];
+          for (let i = 0; i < res.data.length; i++) {
+            this.likes.push(
+              res.data[i].website == "TB"
+                ? res.data[i].tbGoods.gid
+                : res.data[i].jdGoods.gid
+            );
+          }
+          console.log(res);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+    addLikes(gid: number, website: string, name: string) {
+      if (!store.state.isLogin) {
+        ElMessage.error("请先登录");
+        router.push("/login");
+        return false;
+      }
+      const urlBase = store.state.urlBase;
+      axios
+        .post(urlBase + "/api/user/add-likes", {
+          uid: store.state.uid,
+          gid: gid,
+          website: website,
+          name: name,
+        })
+        .then(() => {
+          this.getLikes();
+        })
+        .catch((e: unknown) => {
+          throw e;
+        });
+    },
+    removeLikes(gid: number, website: string) {
+      if (!store.state.isLogin) {
+        ElMessage.error("请先登录");
+        router.push("/login");
+        return false;
+      }
+      const urlBase = store.state.urlBase;
+      axios
+        .post(urlBase + "/api/user/remove-likes", {
+          uid: store.state.uid,
+          gid: gid,
+          website: website,
+        })
+        .then(() => {
+          this.getLikes();
+        })
+        .catch((e: unknown) => {
+          console.error(e);
+          throw e;
+        });
     },
   },
 });

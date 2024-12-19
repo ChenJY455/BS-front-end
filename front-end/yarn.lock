@@ -3049,6 +3049,14 @@ easy-stack@1.0.1:
   resolved "https://registry.npmmirror.com/easy-stack/-/easy-stack-1.0.1.tgz"
   integrity sha512-wK2sCs4feiiJeFXn3zvY0p41mdU5VUgbgs1rNsc/y5ngFUijdWd+iIN8eoyuZHKB8xN6BL4PdWmzqFmxNg6V2w==
 
+echarts@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.npmjs.org/echarts/-/echarts-5.5.1.tgz#8dc9c68d0c548934bedcb5f633db07ed1dd2101c"
+  integrity sha512-Fce8upazaAXUVUVsjgV6mBnGuqgO+JNDlcgF79Dksy4+wgGpQB2lmYoO4TSweFg/mZITdpGHomw/cNBJZj1icA==
+  dependencies:
+    tslib "2.3.0"
+    zrender "5.6.0"
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.npmmirror.com/ee-first/-/ee-first-1.1.1.tgz"
@@ -4495,7 +4503,14 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-magic-string@^0.30.1, magic-string@^0.30.11, magic-string@^0.30.5:
+magic-string@^0.30.1:
+  version "0.30.15"
+  resolved "https://registry.npmjs.org/magic-string/-/magic-string-0.30.15.tgz#d5474a2c4c5f35f041349edaba8a5cb02733ed3c"
+  integrity sha512-zXeaYRgZ6ldS1RJJUrMrYgNJ4fdwnyI6tVqoiIhyCyv5IVTK9BU8Ic2l253GGETQHxI4HNUwhJ3fjDhKqEoaAw==
+  dependencies:
+    "@jridgewell/sourcemap-codec" "^1.5.0"
+
+magic-string@^0.30.11, magic-string@^0.30.5:
   version "0.30.12"
   resolved "https://registry.npmmirror.com/magic-string/-/magic-string-0.30.12.tgz"
   integrity sha512-Ea8I3sQMVXr8JhN4z+H/d8zwo+tYDgHE9+5G4Wnrwhs0gaK9fXTKx0Tw5Xwsd/bCPTTZNRAdpyzvoeORe9LYpw==
@@ -6233,6 +6248,11 @@ ts-loader@^9.2.5:
     semver "^7.3.4"
     source-map "^0.7.4"
 
+tslib@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
+  integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
+
 tslib@^1.8.1:
   version "1.14.1"
   resolved "https://registry.npmmirror.com/tslib/-/tslib-1.14.1.tgz"
@@ -6376,7 +6396,7 @@ unplugin-icons@0.14.1:
 
 unplugin-vue-components@0.25.2:
   version "0.25.2"
-  resolved "https://registry.npmmirror.com/unplugin-vue-components/-/unplugin-vue-components-0.25.2.tgz"
+  resolved "https://registry.npmjs.org/unplugin-vue-components/-/unplugin-vue-components-0.25.2.tgz#99d9d02a4066a24e720edbe74a82a4ee6ff86153"
   integrity sha512-OVmLFqILH6w+eM8fyt/d/eoJT9A6WO51NZLf1vC5c1FZ4rmq2bbGxTy8WP2Jm7xwFdukaIdv819+UI7RClPyCA==
   dependencies:
     "@antfu/utils" "^0.7.5"
@@ -6399,10 +6419,18 @@ unplugin@^0.5.2:
     webpack-sources "^3.2.3"
     webpack-virtual-modules "^0.4.3"
 
-unplugin@^1.14.1, unplugin@^1.4.0, unplugin@^1.5.0:
+unplugin@^1.14.1, unplugin@^1.5.0:
   version "1.15.0"
   resolved "https://registry.npmmirror.com/unplugin/-/unplugin-1.15.0.tgz"
   integrity sha512-jTPIs63W+DUEDW207ztbaoO7cQ4p5aVaB823LSlxpsFEU3Mykwxf3ZGC/wzxFJeZlASZYgVrWeo7LgOrqJZ8RA==
+  dependencies:
+    acorn "^8.14.0"
+    webpack-virtual-modules "^0.6.2"
+
+unplugin@^1.4.0:
+  version "1.16.0"
+  resolved "https://registry.npmjs.org/unplugin/-/unplugin-1.16.0.tgz#ca0f248bf8798cd752dd02e5b381223b737cef72"
+  integrity sha512-5liCNPuJW8dqh3+DM6uNM2EI3MLLpCKp/KY+9pB5M2S2SR2qvvDHhKgBOaTWEbZTAws3CXfB0rKTIolWKL05VQ==
   dependencies:
     acorn "^8.14.0"
     webpack-virtual-modules "^0.6.2"
@@ -6823,3 +6851,10 @@ yorkie@^2.0.0:
     is-ci "^1.0.10"
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
+
+zrender@5.6.0:
+  version "5.6.0"
+  resolved "https://registry.npmjs.org/zrender/-/zrender-5.6.0.tgz#01325b0bb38332dd5e87a8dbee7336cafc0f4a5b"
+  integrity sha512-uzgraf4njmmHAbEUxMJ8Oxg+P3fT04O+9p7gY+wJRVxo8Ge+KmYv0WJev945EH4wFuc4OY2NLXz46FZrWS9xJg==
+  dependencies:
+    tslib "2.3.0"

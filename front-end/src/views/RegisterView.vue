@@ -43,7 +43,6 @@
             type="password"
             placeholder="请输入密码，长度大于6个字符"
             size="large"
-            show-password
           />
           <div
             v-if="error_display.password"
@@ -58,7 +57,6 @@
             type="password"
             placeholder="请再次输入密码"
             size="large"
-            show-password
           />
           <div
             v-if="error_display.password_confirm"
@@ -143,14 +141,12 @@ export default defineComponent({
         this.error_display.password_confirm = false;
       }
       if (pass) {
-        const url = store.state.urlBase + "/api/register";
+        const url = store.state.urlBase + "/api/user/register";
         axios
-          .get(url, {
-            params: {
-              username: this.form.username,
-              email: this.form.email,
-              password: this.form.password,
-            },
+          .post(url, {
+            username: this.form.username,
+            email: this.form.email,
+            password: this.form.password,
           })
           .then((res) => {
             console.log(res);
