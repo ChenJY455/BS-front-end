@@ -7,7 +7,7 @@
     >
       <div class="price">¥{{ product.price }}</div>
       <!-- <div class="factory">{{ product.factory }}</div> -->
-      <div style="margin-right: 15px">
+      <div v-if="showLikes" style="margin-right: 15px">
         <img
           v-if="liked"
           src="../assets/like.png"
@@ -52,6 +52,10 @@ export default {
       type: Function,
       required: true,
     },
+    showLikes: {
+      type: Boolean,
+      required: true,
+    },
   },
   methods: {
     ToDetail() {
@@ -87,9 +91,9 @@ export default {
 
 <style scoped>
 .product {
+  height: 100%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  max-width: 200px;
   padding-bottom: 8px;
   cursor: pointer;
 
@@ -100,8 +104,8 @@ export default {
   }
 
   img {
-    width: 200px;
-    height: 200px;
+    width: 100%;
+    aspect-ratio: 1;
     object-fit: cover;
     border-radius: 10px 10px 0 0;
   }
