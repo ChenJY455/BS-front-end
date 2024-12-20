@@ -8,10 +8,11 @@
         overflow: coverl;
         border-radius: 5px;
         margin: 10px;
+        margin-left: 20px;
       "
     />
     <div style="display: flex; flex-direction: column; width: 100%">
-      <p class="info title">{{ goodsInfo.name }}</p>
+      <p class="info title">{{ goodsInfo.name?.replace(/<.*?>/g, "") }}</p>
       <div
         style="
           display: flex;
@@ -25,9 +26,15 @@
         </div>
         <el-button
           type="primary"
-          style="margin-top: 50px; margin-right: 50px"
-          @click="handleHistory"
+          style="margin-top: 50px; margin-right: 15px"
+          @click="showHistory(goodsInfo.gid, goodsInfo.website, goodsInfo.name)"
           >历史价格</el-button
+        >
+        <el-button
+          type="danger"
+          style="margin-top: 50px; margin-right: 50px"
+          @click="removeLikes(goodsInfo.gid, goodsInfo.website)"
+          >删除</el-button
         >
       </div>
     </div>
@@ -46,20 +53,15 @@ export default {
       type: Function,
       required: true,
     },
+    removeLikes: {
+      type: Function,
+      required: true,
+    },
   },
   data() {
     return {
       goodsInfo: {},
     };
-  },
-  methods: {
-    handleHistory() {
-      this.showHistory(
-        this.goodsInfo.gid,
-        this.goodsInfo.website,
-        this.goodsInfo.name
-      );
-    },
   },
   mounted() {
     console.log(this.likes);
@@ -77,6 +79,7 @@ export default {
   margin: 0;
   padding: 10px 0;
   border: 1px solid #ccc;
+  border-width: 1px 0;
 }
 .info {
   margin: 0;

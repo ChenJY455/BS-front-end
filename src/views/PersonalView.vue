@@ -1,5 +1,5 @@
 <template>
-  <div class="page" style="height: fit-content">
+  <div class="page" style="height: fit-content; min-height: 100vh">
     <div style="width: 100%">
       <el-row
         style="
@@ -284,6 +284,7 @@
             <LikedItemView
               :likes="item"
               :showHistory="showHistory"
+              :removeLikes="removeLikes"
             ></LikedItemView>
           </div>
         </div>
@@ -479,25 +480,50 @@ export default defineComponent({
           ElMessage.error("获取历史价格失败");
         });
     },
+    removeLikes(gid: number, website: string) {
+      if (!store.state.isLogin) {
+        ElMessage.error("请先登录");
+        router.push("/login");
+        return false;
+      }
+      const urlBase = store.state.urlBase;
+      axios
+        .post(urlBase + "/api/user/remove-likes", {
+          uid: store.state.uid,
+          gid: gid,
+          website: website,
+        })
+        .then(() => {
+          ElMessage.success("删除成功");
+          this.getLikes();
+        })
+        .catch((e: unknown) => {
+          console.error(e);
+          ElMessage.error("删除失败");
+        });
+    },
+    getLikes() {
+      axios
+        .get(store.state.urlBase + "/api/user/get-likes", {
+          params: {
+            uid: this.uid,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          this.likes = res.data;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
   },
   mounted() {
     this.uid = store.state.uid;
     this.username = store.state.username;
     this.email = store.state.email;
     this.isLogin = store.state.isLogin;
-    axios
-      .get(store.state.urlBase + "/api/user/get-likes", {
-        params: {
-          uid: this.uid,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        this.likes = res.data;
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    this.getLikes();
   },
 });
 </script>

@@ -64,6 +64,9 @@
           >
             {{ error_info.password_confirm }}
           </div>
+          <div v-if="error_display.repeat" style="font-size: 12px; color: red">
+            {{ error_info.repeat }}
+          </div>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -100,12 +103,14 @@ export default defineComponent({
         email: false,
         password: false,
         password_confirm: false,
+        repeat: false,
       },
       error_info: {
         username: "用户名长度不能小于6个字符",
         email: "请输入正确的邮箱",
         password: "密码长度不能小于6个字符",
         password_confirm: "两次输入的密码不一致",
+        repeat: "用户名或邮箱已存在",
       },
     };
   },
@@ -153,7 +158,9 @@ export default defineComponent({
             store.commit("setUsername", this.form.username);
             this.$router.push("/");
           })
-          .catch((err: unknown) => {
+          .catch((err) => {
+            if (err.response.data.includes("Duplicate"))
+              this.error_display.repeat = true;
             console.error(err);
             ElMessage.error("注册失败");
           });

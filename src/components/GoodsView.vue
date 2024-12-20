@@ -1,7 +1,7 @@
 <template>
   <div class="product" @click="ToDetail">
     <img :src="product.img_url" alt="Product Image" />
-    <p class="name">{{ product.name.replace(/<.*?>/g, "") }}</p>
+    <p class="name">{{ product.name?.replace(/<.*?>/g, "") }}</p>
     <div
       style="display: flex; flex-direction: row; justify-content: space-between"
     >
@@ -62,7 +62,8 @@ export default {
         this.addLikes(
           this.product.gid,
           this.product.website,
-          this.product.name
+          this.product.name,
+          this.product.price
         );
         this.liked = true;
       } catch (e) {

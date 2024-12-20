@@ -1,4 +1,64 @@
 <template>
+  <div class="test_bnt">
+    <el-button @click="testVisible = true">更改价格</el-button>
+  </div>
+  <el-dialog
+    v-model="testVisible"
+    title="更改价格"
+    style="padding: 20px 30px"
+    width="20%"
+    center
+  >
+    <el-form-item
+      label="网站"
+      style="
+        flex: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      "
+    >
+      <el-select v-model="testForm.website" placeholder="请选择">
+        <el-option label="淘宝" value="TB" />
+        <el-option label="京东" value="JD" />
+      </el-select>
+    </el-form-item>
+    <el-form :model="testForm">
+      <el-form-item
+        label="商品ID"
+        style="
+          flex: none;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+        "
+      >
+        <el-input v-model="testForm.gid" />
+      </el-form-item>
+      <el-form-item
+        label="价格"
+        style="
+          flex: none;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+        "
+      >
+        <el-input v-model="testForm.price" />
+      </el-form-item>
+      <div
+        style="
+          flex: none;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+        "
+      >
+        <el-button type="primary" @click="sendTest">确定</el-button>
+        <el-button @click="testVisible = false">取消</el-button>
+      </div>
+    </el-form>
+  </el-dialog>
   <div style="width: 100%">
     <el-row
       style="
@@ -173,6 +233,12 @@ export default defineComponent({
       website: "TB",
       productRows: Array<{ gid: string }[]>(),
       likes: Array<string>(),
+      testVisible: false,
+      testForm: {
+        gid: 0,
+        website: "",
+        price: 0,
+      },
     };
   },
   mounted() {
@@ -231,6 +297,7 @@ export default defineComponent({
     changeWebsite(web: string) {
       this.website = web;
       this.productRows = [];
+      this.SearchProduct();
     },
     lastPage() {
       if (this.page > 1) {
@@ -301,7 +368,7 @@ export default defineComponent({
           console.error(err);
         });
     },
-    addLikes(gid: number, website: string, name: string) {
+    addLikes(gid: number, website: string, name: string, price: number) {
       if (!store.state.isLogin) {
         ElMessage.error("请先登录");
         router.push("/login");
@@ -314,6 +381,7 @@ export default defineComponent({
           gid: gid,
           website: website,
           name: name,
+          price: price,
         })
         .then(() => {
           this.getLikes();
@@ -343,11 +411,36 @@ export default defineComponent({
           throw e;
         });
     },
+    sendTest() {
+      const url = store.state.urlBase + "/api/test/change-price";
+      axios
+        .post(url, {
+          gid: this.testForm.gid,
+          website: this.testForm.website,
+          price: this.testForm.price,
+        })
+        .then((res) => {
+          console.log(res);
+          ElMessage.success("修改成功");
+          this.testVisible = false;
+        })
+        .catch((err) => {
+          console.error(err);
+          ElMessage.error("修改失败");
+        });
+    },
   },
 });
 </script>
 
 <style scoped>
+.test_bnt {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
 .product-block {
   display: flex;
   justify-content: center;
