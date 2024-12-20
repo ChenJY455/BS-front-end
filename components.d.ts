@@ -24,6 +24,8 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     GoodsView: typeof import('./src/components/GoodsView.vue')['default']
     LikedItemView: typeof import('./src/components/LikedItemView.vue')['default']
+    MobileHomeView: typeof import('./src/components/MobileHomeView.vue')['default']
+    PCHomeView: typeof import('./src/components/PCHomeView.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
