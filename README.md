@@ -1,5 +1,5 @@
 # purweb
-
+浙江大学2024~2025年B/S软件设计课程作业，前端部分
 ## Project setup
 ```
 yarn install
