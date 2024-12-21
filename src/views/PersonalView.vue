@@ -426,7 +426,7 @@ export default defineComponent({
       if (!pass) {
         return;
       }
-      const url = store.state.urlBase + "/api/user/modify";
+      const url = process.env.VUE_APP_API_URL + "/api/user/modify";
       axios
         .post(url, {
           uid: this.uid,
@@ -450,7 +450,7 @@ export default defineComponent({
     },
     showHistory(gid: number, website: string, name: string) {
       axios
-        .get(store.state.urlBase + "/api/goods/get-history", {
+        .get(process.env.VUE_APP_API_URL + "/api/goods/get-history", {
           params: {
             gid: gid,
             website: website,
@@ -463,11 +463,16 @@ export default defineComponent({
           for (let i = 0; i < res.data.length; i++) {
             var date = new Date(res.data[i].t);
             this.t.push(
+              // 具体时间
               date.getFullYear() +
                 "-" +
                 (date.getMonth() + 1) +
                 "-" +
-                date.getDate()
+                date.getDate() +
+                " " +
+                date.getHours() +
+                ":" +
+                date.getMinutes()
             );
             this.price.push(res.data[i].price);
           }
@@ -486,7 +491,7 @@ export default defineComponent({
         router.push("/login");
         return false;
       }
-      const urlBase = store.state.urlBase;
+      const urlBase = process.env.VUE_APP_API_URL;
       axios
         .post(urlBase + "/api/user/remove-likes", {
           uid: store.state.uid,
@@ -504,7 +509,7 @@ export default defineComponent({
     },
     getLikes() {
       axios
-        .get(store.state.urlBase + "/api/user/get-likes", {
+        .get(process.env.VUE_APP_API_URL + "/api/user/get-likes", {
           params: {
             uid: this.uid,
           },

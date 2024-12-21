@@ -265,7 +265,7 @@ export default defineComponent({
       this.$router.push("/personal");
     },
     SearchProduct() {
-      const url = store.state.urlBase + "/api/goods/get-list";
+      const url = process.env.VUE_APP_API_URL + "/api/goods/get-list";
       axios
         .get(url, {
           params: {
@@ -303,7 +303,7 @@ export default defineComponent({
     },
     lastPage() {
       if (this.page > 1) {
-        const url = store.state.urlBase + "/api/goods/get-list";
+        const url = process.env.VUE_APP_API_URL + "/api/goods/get-list";
         axios
           .get(url, {
             params: {
@@ -325,7 +325,7 @@ export default defineComponent({
       }
     },
     nextPage() {
-      const url = store.state.urlBase + "/api/goods/get-list";
+      const url = process.env.VUE_APP_API_URL + "/api/goods/get-list";
       axios
         .get(url, {
           params: {
@@ -348,7 +348,7 @@ export default defineComponent({
         });
     },
     getLikes() {
-      const url = store.state.urlBase + "/api/user/get-likes";
+      const url = process.env.VUE_APP_API_URL + "/api/user/get-likes";
       axios
         .get(url, {
           params: {
@@ -376,7 +376,7 @@ export default defineComponent({
         router.push("/login");
         return false;
       }
-      const urlBase = store.state.urlBase;
+      const urlBase = process.env.VUE_APP_API_URL;
       axios
         .post(urlBase + "/api/user/add-likes", {
           uid: store.state.uid,
@@ -398,7 +398,7 @@ export default defineComponent({
         router.push("/login");
         return false;
       }
-      const urlBase = store.state.urlBase;
+      const urlBase = process.env.VUE_APP_API_URL;
       axios
         .post(urlBase + "/api/user/remove-likes", {
           uid: store.state.uid,
@@ -414,7 +414,7 @@ export default defineComponent({
         });
     },
     sendTest() {
-      const url = store.state.urlBase + "/api/test/change-price";
+      const url = process.env.VUE_APP_API_URL + "/api/test/change-price";
       axios
         .post(url, {
           gid: this.testForm.gid,

@@ -2,7 +2,6 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    urlBase: "http://localhost:15455",
     username: "",
     uid: 0,
     email: "",

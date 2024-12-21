@@ -131,7 +131,7 @@ export default defineComponent({
       }
       if (
         !this.form.email.match(
-          /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+$/
+          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         )
       ) {
         this.error_display.email = true;
@@ -146,7 +146,7 @@ export default defineComponent({
         this.error_display.password_confirm = false;
       }
       if (pass) {
-        const url = store.state.urlBase + "/api/user/register";
+        const url = process.env.VUE_APP_API_URL + "/api/user/register";
         axios
           .post(url, {
             username: this.form.username,

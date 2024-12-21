@@ -91,7 +91,7 @@ export default defineComponent({
   methods: {
     handleLogin() {
       // Send request
-      const url = store.state.urlBase + "/api/user/login";
+      const url = process.env.VUE_APP_API_URL + "/api/user/login";
       axios
         .get(url, {
           params: {

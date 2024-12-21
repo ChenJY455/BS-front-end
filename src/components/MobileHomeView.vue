@@ -155,7 +155,7 @@ export default defineComponent({
   },
   methods: {
     SearchProduct() {
-      const url = store.state.urlBase + "/api/goods/get-list";
+      const url = process.env.VUE_APP_API_URL + "/api/goods/get-list";
       axios
         .get(url, {
           params: {
@@ -192,7 +192,7 @@ export default defineComponent({
       this.SearchProduct();
     },
     nextPage() {
-      const url = store.state.urlBase + "/api/goods/get-list";
+      const url = process.env.VUE_APP_API_URL + "/api/goods/get-list";
       axios
         .get(url, {
           params: {
@@ -216,7 +216,7 @@ export default defineComponent({
     },
     lastPage() {
       if (this.page > 1) {
-        const url = store.state.urlBase + "/api/goods/get-list";
+        const url = process.env.VUE_APP_API_URL + "/api/goods/get-list";
         axios
           .get(url, {
             params: {
